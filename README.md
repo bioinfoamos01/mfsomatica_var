@@ -1,6 +1,12 @@
 # Pipeline prognóstico de Mielofibrose por evidência genética somática
 - A mielofibrose é uma neoplasia de medula óssea cuja taxa de sobrevida pós-diagnóstico pode variar de meses à décadas.
 - Este projeto auxilia a estimar o prognóstico da doença e sobrevida, por meio da filtragem de variantes somáticas.
+- Foram filtradas 30 amostras do projeto "LMA Brasil" (WP048, WP093, WP087, WP060, WP056, WP066, WP064, WP072, WP078, WP285, WP280, WP274, WP276, WP270, WP216, WP306, WP297, WP291, WP295, WP204, WP160, WP164, WP162, WP212, WP170, WP196, WP180, WP188, WP140, WP126).
+
+- Os arquivos VCF do projeto foram convertidos previamente da versão do genoma hg19 para hg38 utilizando o programa gatk LiftoverVcf com as posições hg19ToHg38.over.chain da UCSC, seguido de anotação pelo Ensembl-VEP (VEP annot).
+
+- Este repositório compreende todos os arquivos essenciais para a filtragem e análise das variantes relacionadas ao prognóstico da Mielofibrose. Aqui, encontram-se os dados anotados para análise, o script de filtragem e outros arquivos relevantes.
+
 - Os genes considerados para a filtragem foram obtidos do artigo fundador do GIPSS – Sistema de Prognóstico por Pontuação Inspirado em dados Genéticos (https://doi.org/10.1038/s41375-018-0107-z). São eles:
   - CALR
   - ASXL1
@@ -11,7 +17,10 @@
   - Risco intermediário 1 (sobrevida média 10,3 anos)
   - Risco intermediário 2 (sobrevida média 4,6 anos)
   - Risco alto (sobrevida média 2,6 anos)
- 
+## (RESULTADOS)
+Os resultados e discussão do projeto podem ser acessados no seguinte caminho: <https://sites.google.com/view/g1-t5vsomticas/estudo-de-caso?authuser=0>.
+Abaixo segue o script utilizado para filtragem dos VCFs do estudo.
+
 ## 1. Preparação ambiente de trabalho
 ```
 # Clonar github do projeto lmabrasil-hg48.git
@@ -211,3 +220,51 @@ plt.pie(sections, labels=labels, autopct = '%1.1f%%')
 plt.title('Frequência de variantes em genes de impacto para o prognóstico de mielofibrose (n=14)')
 plt.show()
 ```
+Na análise gráfica, dos 30 pacientes estudados, 14 apresentaram variantes nos genes-alvo selecionados para a avaliação prognóstica, conforme os critérios estabelecidos pelo GIPSS. Os 16 pacientes restantes, que não exibiram variantes, foram automaticamente atribuídos a uma pontuação de +1, uma vez que não possuíam a mutação protetora tipo 1 em CALR.
+```
+#Exibindo os dados usando um dataframe pandas
+
+import pandas as pd
+
+data = {"TOTAL DE PACIENTES": [contagem[0],contagem[1],contagem[2],contagem[3]],
+        "SCORE": ["0", "1", "2", ">=3"],
+        "RISCO": ["Baixo", "Intermediário 1", "Intermediário 2", "Alto"],
+        "SOBREVIDA EM 5 ANOS (%)": ["94,0%", "73,0%", "40,0%", "14,0%"],
+        "SOBREVIDA MÉDIA (ANOS)": ["26,4 anos", "10,3 anos", "4,6 anos", "2,6 anos"]}
+
+dataf = pd.DataFrame(data)
+
+dataf.style.set_caption('ESTRATIFICADOR DE PROGNÓSTICO DE MIELOFIBROSE BASEADADO EM GIPSS (sem cariotipagem)')
+```
+
+```
+
+criterios = {"Penalidade": ["+1", "+1", "+1", "+1"],
+        "Achados": ["Ausência de deleção de 52pb em CALR", "Mutação em Exon 1 de SRSF2", "Mutação em Exon 12 de ASXL1", "Mutação Q157 em U2AF1"]}
+criteriosf = pd.DataFrame(criterios)
+criteriosf.style.set_caption('CRITÉRIOS DE PONTUAÇÃO BASEADO EM GIPSS (adaptado)')
+```
+
+```
+import numpy as npimport
+import matplotlib.pyplot as plt
+
+#Prognóstico de Mielofibrose - GIPSS adaptado
+labels = 'BAIXO', 'INTERMEDIÁRIO 1', 'INTERMEDIÁRIO-2', 'ALTO'
+sections = [6,21, 3, 0 ]
+
+plt.pie(sections, labels=labels, autopct = '%1.1f%%')
+
+plt.title('Frequência de prognóstico GIPSS* para Mielofibrose (n=30)')
+plt.show()
+```
+Dos 30 pacientes analisados, todos receberam um escore de risco, variando de 0 a >= 3, após a filtragem de genes e variantes com impacto no prognóstico de mielofibrose (MF). Utilizamos o guideline do GIPSS para esta avaliação, porém sem considerar a avaliação do cariótipo.
+
+### Autores 📃
+Amós Eduardo - codificação de script\
+Renato puga - codificação de script\
+Rabiana Rocha - revisão científica\
+Luiz Gustavo - revisão científica\
+Thiago adalton - front-end (google sites)\
+Clara Sabença - front-end (google sites)
+
