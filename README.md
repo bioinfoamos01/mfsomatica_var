@@ -121,7 +121,7 @@ df_concat.to_csv('/content/lmabrasil-hg38/tabela_final/tabela_final.csv', index=
 
 df_concat
 ```
-###c) Gerar uma tabela com os scores de risco
+### c) Gerar uma tabela com os scores de risco
 
 ```
 import pandas as pd
