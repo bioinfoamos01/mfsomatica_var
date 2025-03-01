@@ -18,8 +18,8 @@
   - Risco intermediário 2 (sobrevida média 4,6 anos)
   - Risco alto (sobrevida média 2,6 anos)
 ## (RESULTADOS)
-Os resultados e discussão do projeto podem ser acessados no seguinte caminho: <https://sites.google.com/view/g1-t5vsomticas/estudo-de-caso?authuser=0>.
-Abaixo segue o script utilizado para filtragem dos VCFs do estudo.
+- Os resultados e discussão do projeto podem ser acessados no seguinte caminho: <https://sites.google.com/view/g1-t5vsomticas/estudo-de-caso?authuser=0>.
+- Abaixo segue o script utilizado para filtragem dos VCFs do estudo.
 
 ## 1. Preparação ambiente de trabalho
 ```
